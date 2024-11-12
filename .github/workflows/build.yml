@@ -74,7 +74,7 @@ jobs:
       run: |
         sudo chmod -R 777 /data/es
         sudo docker-compose -f ${{ github.workspace }}/docs/elasticsearch/docker-compose.yml up -d
-        output=$(docker exec elasticsearch bin/elasticsearch-setup-passwords auto --batch)
+        output=$(sudo docker exec elasticsearch bin/elasticsearch-setup-passwords auto --batch)
         elastic_password=$(echo "$output" | grep "elastic" | awk '{print $NF}')
         kibana_password=$(echo "$output" | grep "kibana" | awk '{print $NF}')
         logstash_system_password=$(echo "$output" | grep "logstash_system" | awk '{print $NF}')
