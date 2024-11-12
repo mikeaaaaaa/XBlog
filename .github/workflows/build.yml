@@ -39,6 +39,9 @@ jobs:
           - 3306:3306
 
     steps:
+    # 设置Docker-compose
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v3
     - name: Check Docker Compose version
       run: docker-compose --version
 
@@ -72,6 +75,7 @@ jobs:
       run: |
         wget https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.2.0/elasticsearch-analysis-ik-7.2.0.zip -O analysis.zip
         sudo unzip analysis.zip -d /data/es/plugins/elasticsearch-analysis-ik
+
     # 启动elasticsearch集群
     - name: Start the elasticsearch cluster
       run: |
