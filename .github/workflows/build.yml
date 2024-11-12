@@ -47,6 +47,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    # 等待mysql启动
+    - name: Wait for MySQL
+      run: |
+        sleep 15
         
     # 执行sql脚本
     - name: Run SQL script
