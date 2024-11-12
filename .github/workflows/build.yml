@@ -72,7 +72,7 @@ jobs:
     # 启动elasticsearch集群
     - name: Start the elasticsearch cluster
       run: |
-        chmod -R 777 /data/es
+        sudo chmod -R 777 /data/es
         sudo docker-compose -f ${{ github.workspace }}/docs/elasticsearch/docker-compose.yml up -d
         output=$(docker exec elasticsearch bin/elasticsearch-setup-passwords auto --batch)
         elastic_password=$(echo "$output" | grep "elastic" | awk '{print $NF}')
