@@ -24,10 +24,12 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
+      # 凯斯consul服务
       consul:
         image: hashicorp/consul
         ports:
           - 8500:8500
+      # 增加mysql服务
       mysql:
         image: mysql:5.7
         env:
@@ -38,20 +40,47 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    # Set up JDK 17，使用temurin发行版，缓存maven
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Wait for MySQL to be ready
-      run: sleep 30
+        
+    # 执行sql脚本
     - name: Run SQL script
       run: |
         sudo apt-get install mysql-client
         mysql -h 127.0.0.1 -P 3306 -u root -prootroot spartacus < ${{ github.workspace}}/db/spartacus.sql
         mysql -h 127.0.0.1 -P 3306 -u root -prootroot spartacus < ${{ github.workspace}}/db/init_data.sql
+    # 创建目录
+    - name: Create directories
+      run: |
+        mkdir -p /data/es/{es01,es02,es03}/data 
+        mkdir -p /data/es/{es01,es02,es03}/log
+        mkdir -p /data/es/plugins/elasticsearch-analysis-ik
+    # 下载并解压分词器zip文件
+    - name: Download and unzip the analyzer
+      run: |
+        wget https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.2.0/elasticsearch-analysis-ik-7.2.0.zip -o analysis.zip
+        unzip analysis.zip -d /data/es/plugins/elasticsearch-analysis-ik
+    # 启动elasticsearch集群
+    - name: Start the elasticsearch cluster
+      run: |
+        chmod -R 777 /data/es
+        docker-compose -f ${{ github.workspace }}/docs/elasticsearch/docker-compose.yml up -d
+        output=$(docker exec elasticsearch bin/elasticsearch-setup-passwords auto --batch)
+        elastic_password=$(echo "$output" | grep "elastic" | awk '{print $NF}')
+        kibana_password=$(echo "$output" | grep "kibana" | awk '{print $NF}')
+        logstash_system_password=$(echo "$output" | grep "logstash_system" | awk '{print $NF}')
+        beats_system_password=$(echo "$output" | grep "beats_system" | awk '{print $NF}')
+        remote_monitoring_user_password=$(echo "$output" | grep "remote_monitoring_user" | awk '{print $NF}')
+        echo "elastic_password: $elastic_password"
+        echo "kibana_password: $kibana_password"
+        
 
+    # 使用maven构建项目
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
