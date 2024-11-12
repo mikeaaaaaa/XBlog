@@ -44,6 +44,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - name: Wait for MySQL to be ready
+      run: sleep 30
     - name: Run SQL script
       run: |
         sudo apt-get install mysql-client
