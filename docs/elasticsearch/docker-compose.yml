@@ -35,9 +35,9 @@ services:
       - "9300:9300"
     volumes:
       - ./elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
-      - /data/es/es01/data:/usr/share/elasticsearch/data
-      - /data/es/es01/log:/usr/share/elasticsearch/log
-      - /data/es/plugins:/usr/share/elasticsearch/plugins
+      - ./data/es/es01/data:/usr/share/elasticsearch/data
+      - ./data/es/es01/log:/usr/share/elasticsearch/log
+      - ./data/es/plugins:/usr/share/elasticsearch/plugins
     networks:
       - net-es
   es02:
@@ -46,7 +46,7 @@ services:
     restart: always
     environment:
       - node.name=es02
-      - cluster.name=spartacus
+      - cluster.name=xblog
       - node.master=true
       - node.data=true
       - discovery.seed_hosts=es01,es02,es03
@@ -75,9 +75,9 @@ services:
       - "9301:9300"
     volumes:
       - ./elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
-      - /data/es/es02/data:/usr/share/elasticsearch/data
-      - /data/es/es02/log:/usr/share/elasticsearch/log
-      - /data/es/plugins:/usr/share/elasticsearch/plugins
+      - ./data/es/es02/data:/usr/share/elasticsearch/data
+      - ./data/es/es02/log:/usr/share/elasticsearch/log
+      - ./data/es/plugins:/usr/share/elasticsearch/plugins
     networks:
       - net-es
   es03:
@@ -86,7 +86,7 @@ services:
     restart: always
     environment:
       - node.name=es03
-      - cluster.name=spartacus
+      - cluster.name=xblog
       - node.master=true
       - node.data=true
       - discovery.seed_hosts=es01,es02,es03
@@ -115,9 +115,9 @@ services:
       - "9302:9300"
     volumes:
       - ./elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
-      - /data/es/es03/data:/usr/share/elasticsearch/data
-      - /data/es/es03/log:/usr/share/elasticsearch/log
-      - /data/es/plugins:/usr/share/elasticsearch/plugins
+      - ./data/es/es03/data:/usr/share/elasticsearch/data
+      - ./data/es/es03/log:/usr/share/elasticsearch/log
+      - ./data/es/plugins:/usr/share/elasticsearch/plugins
     networks:
       - net-es
 networks:

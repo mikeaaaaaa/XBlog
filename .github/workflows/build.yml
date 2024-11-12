@@ -72,19 +72,20 @@ jobs:
     # 创建目录
     - name: Create directories
       run: |
-        sudo mkdir -p /data/es/{es01,es02,es03}/data 
-        sudo mkdir -p /data/es/{es01,es02,es03}/log
-        sudo mkdir -p /data/es/plugins/elasticsearch-analysis-ik
+        sudo mkdir -p ${{ github.workspace}}/docs/elasticsearch/data/es/{es01,es02,es03}/data 
+        sudo mkdir -p ${{ github.workspace}}/docs/elasticsearch/data/es/{es01,es02,es03}/log
+        sudo mkdir -p ${{ github.workspace}}/docs/elasticsearch/data/es/plugins/elasticsearch-analysis-ik
     # 下载并解压分词器zip文件
     - name: Download and unzip the analyzer
       run: |
         wget https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.2.0/elasticsearch-analysis-ik-7.2.0.zip -O analysis.zip
-        sudo unzip analysis.zip -d /data/es/plugins/elasticsearch-analysis-ik
+        sudo unzip analysis.zip -d ${{ github.workspace}}/docs/elasticsearch/data/es/plugins/elasticsearch-analysis-ik
 
     # 启动elasticsearch集群
     - name: Start the elasticsearch cluster
       run: |
-        sudo chmod -R 777 /data/es
+        sudo chmod -R 777 ${{ github.workspace}}/docs/elasticsearch/data
+        sudo chmod -R 777 ${{ github.workspace}}/docs/elasticsearch/elastic-certificates.p12
         sudo docker-compose -f ${{ github.workspace }}/docs/elasticsearch/docker-compose.yml up -d
         output=$(sudo docker exec es01 bin/elasticsearch-setup-passwords auto --batch)
         elastic_password=$(echo "$output" | grep "elastic" | awk '{print $NF}')
