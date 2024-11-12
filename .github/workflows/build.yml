@@ -50,7 +50,7 @@ jobs:
     # 等待mysql启动
     - name: Wait for MySQL
       run: |
-        sleep 15
+        sleep 10
         
     # 执行sql脚本
     - name: Run SQL script
@@ -61,9 +61,9 @@ jobs:
     # 创建目录
     - name: Create directories
       run: |
-        mkdir -p /data/es/{es01,es02,es03}/data 
-        mkdir -p /data/es/{es01,es02,es03}/log
-        mkdir -p /data/es/plugins/elasticsearch-analysis-ik
+        sudo mkdir -p /data/es/{es01,es02,es03}/data 
+        sudo mkdir -p /data/es/{es01,es02,es03}/log
+        sudo mkdir -p /data/es/plugins/elasticsearch-analysis-ik
     # 下载并解压分词器zip文件
     - name: Download and unzip the analyzer
       run: |
