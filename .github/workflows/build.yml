@@ -84,7 +84,7 @@ jobs:
     # 启动elasticsearch集群
     - name: Start the elasticsearch cluster
       run: |
-        echo "vm.max_map_count=262145" | sudo tee /etc/sysctl.conf 
+        echo "vm.max_map_count=262145" | sudo tee -a /etc/sysctl.conf 
         sudo sysctl  -p
         sudo chmod -R 777 /data/es
         docker-compose -f ${{ github.workspace }}/docs/elasticsearch/docker-compose.yml up -d
