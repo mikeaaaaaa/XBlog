@@ -39,6 +39,9 @@ jobs:
           - 3306:3306
 
     steps:
+    - name: Check Docker Compose version
+      run: docker-compose --version
+
     - uses: actions/checkout@v4
     # Set up JDK 17，使用temurin发行版，缓存maven
     - name: Set up JDK 17
