@@ -50,7 +50,7 @@ jobs:
     # 等待mysql启动
     - name: Wait for MySQL
       run: |
-        sleep 10
+        sleep 5
         
     # 执行sql脚本
     - name: Run SQL script
@@ -67,7 +67,7 @@ jobs:
     # 下载并解压分词器zip文件
     - name: Download and unzip the analyzer
       run: |
-        wget https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.2.0/elasticsearch-analysis-ik-7.2.0.zip -o analysis.zip
+        wget https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.2.0/elasticsearch-analysis-ik-7.2.0.zip -O analysis.zip
         unzip analysis.zip -d /data/es/plugins/elasticsearch-analysis-ik
     # 启动elasticsearch集群
     - name: Start the elasticsearch cluster
