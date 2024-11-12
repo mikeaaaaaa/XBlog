@@ -28,6 +28,13 @@ jobs:
         image: hashicorp/consul
         ports:
           - 8500:8500
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: rootroot
+          MYSQL_DATABASE: spartacus
+        ports:
+          - 3306:3306
 
     steps:
     - uses: actions/checkout@v4
@@ -37,6 +44,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - name: Run SQL script
+      run: |
+        sudo apt-get install mysql-client
+        mysql -h 127.0.0.1 -P 3306 -u root -prootroot spartacus < ${{ github.workspace}}/db/spartacus.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -prootroot spartacus < ${{ github.workspace}}/db/init_data.sql
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
